@@ -53,7 +53,6 @@ app.use(cors(corsOptions));
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
-app.use();
 
 // API Routes
 app.use("/api/auth", authRoutes);
