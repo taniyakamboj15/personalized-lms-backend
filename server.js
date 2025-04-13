@@ -7,14 +7,14 @@ const path = require("path");
 
 require("dotenv").config();
 
-// const authRoutes = require("./server/routes/authRoutes");
-// const userRoutes = require("./server/routes/userRoutes");
-// const progressRoutes = require("./server/routes/progressRoutes");
-// const adminRoutes = require("./server/routes/adminRoutes");
-// const topicRoutes = require("./server/routes/topicRoutes");
-// const courseRoutes = require("./server/routes/courseRoutes");
-// const questionRoutes = require("./server/routes/questionRoutes");
-// const feedBackRoutes = require("./server/routes/feedBackRoutes");
+const authRoutes = require("./server/routes/authRoutes");
+const userRoutes = require("./server/routes/userRoutes");
+const progressRoutes = require("./server/routes/progressRoutes");
+const adminRoutes = require("./server/routes/adminRoutes");
+const topicRoutes = require("./server/routes/topicRoutes");
+const courseRoutes = require("./server/routes/courseRoutes");
+const questionRoutes = require("./server/routes/questionRoutes");
+const feedBackRoutes = require("./server/routes/feedBackRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -55,14 +55,14 @@ app.use(express.json());
 app.use(cookieParser());
 
 // API Routes
-// app.use("/api/auth", authRoutes);
-// app.use("/api/user", userRoutes);
-// app.use("/api/progress", progressRoutes);
-// app.use("/api/admin", adminRoutes);
-// app.use("/api/topic", topicRoutes);
-// app.use("/api/course", courseRoutes);
-// app.use("/api/questions", questionRoutes);
-// app.use("/api/feedback", feedBackRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api/progress", progressRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/topic", topicRoutes);
+app.use("/api/course", courseRoutes);
+app.use("/api/questions", questionRoutes);
+app.use("/api/feedback", feedBackRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Hellop from express" });
