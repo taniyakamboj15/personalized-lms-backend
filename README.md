@@ -92,7 +92,7 @@ topicRoutes.js
 1. **Clone the repository:**
 
 ```bash
-git clone https://github.com/yourusername/eduDev-backend.git
+git clone https://github.com/taniyakamboj15/personalized-lms-backend.git
 cd eduDev-backend
 ```
 
