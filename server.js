@@ -5,7 +5,6 @@ const cors = require("cors");
 const path = require("path");
 
 require("dotenv").config();
-
 const authRoutes = require("./server/routes/authRoutes");
 const userRoutes = require("./server/routes/userRoutes");
 const progressRoutes = require("./server/routes/progressRoutes");
@@ -42,7 +41,6 @@ const corsOptions = {
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
 };
-
 app.use("/", limiter);
 app.use(cors(corsOptions));
 
@@ -64,7 +62,6 @@ app.get("/", (req, res) => {
   res.status(200).json({ message: "Hellop from express" });
 });
 
-// Error handling middleware (must be last)
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: err.message });
