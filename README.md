@@ -38,7 +38,7 @@ This is the backend API for **EduDev**, a personalized learning management syste
 ## 📁 Project Structure
 
 ```
-```
+
 📦 
 .gitignore
 README.md
@@ -82,8 +82,7 @@ topicRoutes.js
 │     ├─ getNextDifficulty.js
 │     ├─ recommendNextTopic.js
 │     └─ redisClient.js
-
-
+└─ vercel.json
 ```
 
 ---
@@ -103,7 +102,7 @@ cd eduDev-backend
 npm install
 ```
 
-3. **Create a `.env` file and add the following variables:**
+3. **Create a ****************`.env`**************** file and add the following variables:**
 
 ```env
 PORT=5000
@@ -178,35 +177,46 @@ The backend API will be running on [http://localhost:5000](http://localhost:5000
 ## 🛡️ Security and Features
 
 ### 1. Rate Limiting
+
 Prevents abuse with a limit of 200 requests per hour per user.
 
 ### 2. Email OTP Verification
+
 Uses Nodemailer to send OTPs (valid for 5 minutes) during registration.
+
 - OTP is generated and stored in Redis with key: `otp:<user_email>`
 - Expires in 5 minutes (300 seconds)
 - Verified and deleted from Redis once confirmed by user
 
 ### 3. OAuth and Firebase Authentication
+
 Allows secure login via Google OAuth or Firebase Auth.
 
 ### 4. Cookie-Based Auth Tokens
+
 Stores JWT tokens in **HTTP-only cookies** to enhance security and prevent XSS.
 
 ### 5. CORS Support
+
 Ensures secure access from frontend domains in both dev and prod.
 
 ### 6. Dynamic Difficulty
+
 User progress determines next topics and difficulty level dynamically.
 
 ### 7. Feedback Submission
+
 Users can submit feedback only once via email validation.
 
 ---
 
 ## 📝 License
+
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## 📞 Contact
+
 For more information or queries, feel free to reach out:
 
-📧 **taniyakamboj15@gmail.com**
+📧 **[taniyakamboj15@gmail.com](mailto\:taniyakamboj15@gmail.com)**
+
