@@ -1,12 +1,13 @@
 # 📚 EduDev Backend API
 
-This is the backend API for **EduDev**, a personalized learning management system (LMS) built using **Node.js**, **Express.js**, **MongoDB**, **Redis**, **OAuth**, **Firebase Authentication**, and **Nodemailer**. The system supports features like user authentication, course management, dynamic difficulty-based progress tracking, and feedback collection.
+This is the backend API for **EduDev**, a personalized learning management system (LMS) built using **Node.js**, **Express.js**, **MongoDB**, **Redis**, **OAuth**, **Firebase Authentication**, **Nodemailer**, and **Cookies**. The system supports features like user authentication, course management, dynamic difficulty-based progress tracking, and feedback collection.
 
 ---
 
 ## 🚀 Features
 
 - 🔐 **JWT-based Authentication** (Login/Register)
+- 🍪 **Cookie-based Token Storage** for Secure Auth Sessions
 - 🔑 **OAuth Integration** for Google Sign-In
 - 📘 **Course, Topic, and Question Management** (Admin)
 - 📈 **User Progress Tracking** with Dynamic Difficulty
@@ -26,6 +27,7 @@ This is the backend API for **EduDev**, a personalized learning management syste
 - **Redis** — Caching / Performance Optimization
 - **OAuth** — Authentication via Google
 - **Firebase** — Firebase Authentication
+- **Cookies** — Secure Token Management
 - **Nodemailer** — Email Sending for OTP
 - **dotenv** — Environment Variable Management
 - **Rate Limiter** — Basic DDoS Protection
@@ -66,7 +68,8 @@ server/
 │   └── feedbackRoutes.js
 ├── utils/
 │   ├── getNextDifficulty.js
-│   └── recommendNextTopic.js
+│   ├── recommendNextTopic.js
+│   └── redis.client.js
 └── server.js
 ```
 
@@ -116,11 +119,11 @@ The backend API will be running on [http://localhost:5000](http://localhost:5000
 ### 🔐 Auth Routes
 
 - `POST /api/auth/register` - Register a new user
-- `POST /api/auth/sendOtp` - Send OTP for email verification
-- `POST /api/auth/verifyOtp` - Verify OTP for email verification
-- `POST /api/auth/login` - Login with email and password
-- `POST /api/auth/firebaseLogin` - Login with Firebase
-- `POST /api/auth/logout` - Logout the user
+- `POST /api/auth/sendOtp` - Send OTP for email verification *(uses Redis to store OTP for 5 minutes)*
+- `POST /api/auth/verifyOtp` - Verify OTP for email verification *(reads & clears OTP from Redis)*
+- `POST /api/auth/login` - Login with email and password (sets cookie)
+- `POST /api/auth/firebaseLogin` - Login with Firebase (sets cookie)
+- `POST /api/auth/logout` - Logout the user (clears cookie)
 
 ### 👤 User Routes (Protected)
 
@@ -149,6 +152,14 @@ The backend API will be running on [http://localhost:5000](http://localhost:5000
 - `POST /api/feedback` - Submit feedback
 - `GET /api/feedback` - View all submitted feedback
 
+### 🎓 Student Dashboard Routes (Protected)
+
+- `GET /api/dashboard/user-progress` — Get user's overall progress across all enrolled courses
+- `GET /api/dashboard/course-progress/:courseId` — Get topic-wise progress for a specific course
+- `GET /api/dashboard/level` — Get user's current level and stats based on performance
+- `GET /api/dashboard/completed-courses` — Get a list of completed courses
+- `GET /api/dashboard/in-progress-courses` — Get a list of currently enrolled (but incomplete) courses
+
 ---
 
 ## 🛡️ Security and Features
@@ -158,17 +169,23 @@ Prevents abuse with a limit of 200 requests per hour per user.
 
 ### 2. Email OTP Verification
 Uses Nodemailer to send OTPs (valid for 5 minutes) during registration.
+- OTP is generated and stored in Redis with key: `otp:<user_email>`
+- Expires in 5 minutes (300 seconds)
+- Verified and deleted from Redis once confirmed by user
 
 ### 3. OAuth and Firebase Authentication
 Allows secure login via Google OAuth or Firebase Auth.
 
-### 4. CORS Support
+### 4. Cookie-Based Auth Tokens
+Stores JWT tokens in **HTTP-only cookies** to enhance security and prevent XSS.
+
+### 5. CORS Support
 Ensures secure access from frontend domains in both dev and prod.
 
-### 5. Dynamic Difficulty
+### 6. Dynamic Difficulty
 User progress determines next topics and difficulty level dynamically.
 
-### 6. Feedback Submission
+### 7. Feedback Submission
 Users can submit feedback only once via email validation.
 
 ---
@@ -180,4 +197,3 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 For more information or queries, feel free to reach out:
 
 📧 **taniyakamboj15@gmail.com**
-
