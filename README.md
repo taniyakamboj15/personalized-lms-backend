@@ -93,7 +93,7 @@ topicRoutes.js
 
 ```bash
 git clone https://github.com/taniyakamboj15/personalized-lms-backend.git
-cd eduDev-backend
+cd personalized-lms-backend
 ```
 
 2. **Install the dependencies:**
