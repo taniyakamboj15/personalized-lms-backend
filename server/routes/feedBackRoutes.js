@@ -5,6 +5,12 @@ const Feedback = require("../models/FeedBack");
 router.post("/", async (req, res) => {
   try {
     const { name, email, rating, message } = req.body;
+    const isAlreadySubmitted = await Feedback.findOne({ email });
+    if (isAlreadySubmitted) {
+      return res
+        .status(400)
+        .json({ message: "Feedback already submitted with this email" });
+    }
     const newFeedback = new Feedback({ name, email, rating, message });
     await newFeedback.save();
     res.status(201).json({ message: "Feedback submitted successfully" });
