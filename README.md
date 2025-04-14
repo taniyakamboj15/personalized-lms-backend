@@ -38,39 +38,52 @@ This is the backend API for **EduDev**, a personalized learning management syste
 ## 📁 Project Structure
 
 ```
-server/
-├── config/
-│   └── dbConfig.js
-├── controller/
-│   ├── authController.js
-│   ├── progressController.js
-│   ├── userController.js
-│   └── adminController.js
-├── middleware/
-│   ├── authmiddleware.js
-│   ├── adminmiddleware.js
-│   ├── validateUserSignup.js
-│   ├── validateAdmin.js
-│   └── handleValidationErrors.js
-├── models/
-│   ├── UserSchema.js
-│   ├── UserProgressSchema.js
-│   ├── CourseSchema.js
-│   ├── QuestionSchema.js
-│   └── FeedBack.js
-├── routes/
-│   ├── authRoutes.js
-│   ├── userRoutes.js
-│   ├── progressRoutes.js
-│   ├── adminRoutes.js
-│   ├── topicRoutes.js
-│   ├── courseRoutes.js
-│   └── feedbackRoutes.js
-├── utils/
-│   ├── getNextDifficulty.js
-│   ├── recommendNextTopic.js
-│   └── redis.client.js
-└── server.js
+```
+📦 
+.gitignore
+README.md
+├─ package-lock.json
+├─ package.json
+├─ server.js
+├─ server
+│  ├─ config
+dbConfig.js
+email.js
+│  │  └─ firebase.js
+│  ├─ controller
+adminController.js
+authController.js
+progressController.js
+│  │  └─ userController.js
+│  ├─ middleware
+adminmiddleware.js
+authmiddleware.js
+│  │  ├─ handleValidationErrors.js
+│  │  ├─ validateAdmin.js
+│  │  └─ validateUserSignup.js
+│  ├─ models
+│  │  ├─ CourseSchema.js
+│  │  ├─ FeedBack.js
+│  │  ├─ QuestionSchema.js
+TopicSchema.js
+UserProgressSchema.js
+│  │  └─ UserSchema.js
+│  ├─ routes
+adminRoutes.js
+authRoutes.js
+courseRoutes.js
+feedBackRoutes.js
+progressRoutes.js
+questionRoutes.js
+topicRoutes.js
+│  │  └─ userRoutes.js
+│  └─ utils
+│     ├─ generateOtp.js
+│     ├─ getNextDifficulty.js
+│     ├─ recommendNextTopic.js
+│     └─ redisClient.js
+
+
 ```
 
 ---
