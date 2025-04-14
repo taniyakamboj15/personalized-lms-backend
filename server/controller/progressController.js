@@ -44,6 +44,7 @@ exports.updateProgress = async (req, res) => {
     }
 
     const newDifficulty = getNextDifficulty(progress.performance);
+    console.log("new difficluty is ", newDifficulty);
 
     if (progress.difficulty !== newDifficulty) {
       progress.difficulty = newDifficulty;

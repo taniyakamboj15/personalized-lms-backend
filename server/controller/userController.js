@@ -102,7 +102,18 @@ exports.getUserDashboard = async (req, res) => {
       (acc, item) => acc + item.correctAnswers,
       0
     );
-    const level = Math.floor(totalCorrect / 10);
+    let level = Math.floor(totalCorrect / 4);
+    if (level > 2) {
+      level = Math.floor(totalCorrect / 8);
+    } else if (level > 4) {
+      level = Math.floor(totalCorrect / 10);
+    } else if (level > 6) {
+      level = Math.floor(totalCorrect / 14);
+    } else if (level > 8) {
+      level = Math.floor(totalCorrect / 18);
+    } else if (level > 12) {
+      level = Math.floor(totalCorrect / 24);
+    }
 
     res
       .status(200)

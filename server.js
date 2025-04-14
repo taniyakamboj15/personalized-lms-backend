@@ -1,5 +1,4 @@
 const express = require("express");
-const rateLimit = require("express-rate-limit");
 const connectDB = require("./server/config/dbConfig");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -14,23 +13,19 @@ const adminRoutes = require("./server/routes/adminRoutes");
 const topicRoutes = require("./server/routes/topicRoutes");
 const courseRoutes = require("./server/routes/courseRoutes");
 const questionRoutes = require("./server/routes/questionRoutes");
+const rateLimit = require("express-rate-limit");
 const feedBackRoutes = require("./server/routes/feedBackRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Rate Limiting middleware
+// CORS Configuration
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  message: "Too many requests from this IP, try again later",
-  standardHeaders: true,
-  legacyHeaders: false,
+  max: 200,
+  windowMs: 60 * 60 * 1000,
+  message: "Too many request from this IP! Please Try again in an hour",
 });
 
-app.use(limiter);
-
-// CORS Configuration
 const allowedOrigins = [
   "http://localhost:5173", // Development Origin
   "https://edudev.taniyakamboj.info", // Production Origin
@@ -48,6 +43,7 @@ const corsOptions = {
   methods: ["GET", "POST", "PUT", "DELETE"],
 };
 
+app.use("/", limiter);
 app.use(cors(corsOptions));
 
 // Middleware
