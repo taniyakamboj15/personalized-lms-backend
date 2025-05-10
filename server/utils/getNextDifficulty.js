@@ -1,27 +1,33 @@
 function getNextDifficulty(performance) {
-  // Ensure performance data exists for all levels
   performance.easy = performance.easy || { attempted: 0, correct: 0 };
   performance.medium = performance.medium || { attempted: 0, correct: 0 };
   performance.hard = performance.hard || { attempted: 0, correct: 0 };
 
-  const ratio = (level) => {
-    const { attempted, correct } = performance[level];
+  const ratio = ({ attempted, correct }) => {
     return attempted > 0 ? correct / attempted : 0;
   };
 
-  const easyRatio = ratio("easy");
-  const mediumRatio = ratio("medium");
+  const easy = performance.easy;
+  const medium = performance.medium;
+  const hard = performance.hard;
 
-  // If easy level is above 90% success rate with at least 2 attempts, move to medium
-  if (performance.easy.attempted >= 3 && easyRatio > 0.9) return "medium";
+  const easyRatio = ratio(easy);
+  const mediumRatio = ratio(medium);
+  const hardRatio = ratio(hard);
 
-  // If medium level is above 90% success rate with at least 2 attempts, move to hard
-  if (performance.medium.attempted >= 3 && mediumRatio > 0.9) return "hard";
+  const isStrugglingOnMedium = medium.attempted >= 3 && mediumRatio < 0.6;
+  const isExcellingOnEasy = easy.attempted >= 3 && easyRatio > 0.9;
+  const isExcellingOnMedium = medium.attempted >= 3 && mediumRatio > 0.9;
+  const isStrugglingOnHard = hard.attempted >= 3 && hardRatio < 0.6;
 
-  // If medium is less than 60% success rate, move to easy
-  if (performance.medium.attempted >= 3 && mediumRatio < 0.6) return "easy";
+  if (isExcellingOnEasy && !isStrugglingOnMedium) return "medium";
+  if (isExcellingOnMedium && !isStrugglingOnHard) return "hard";
 
-  // Default to current difficulty or medium if not enough data
-  return performance.easy.attempted >= 3 ? "medium" : "easy";
+  if (isStrugglingOnMedium) return "easy";
+  if (isStrugglingOnHard) return "medium";
+
+  if (medium.attempted >= 3) return "medium";
+  return "easy";
 }
+
 module.exports = getNextDifficulty;

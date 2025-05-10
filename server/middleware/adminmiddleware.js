@@ -6,4 +6,12 @@ const adminauth = (req, res, next) => {
   next();
 };
 
-module.exports = adminauth;
+const tutorauth = (req, res, next) => {
+  const { role } = req.user;
+  if (role !== "admin" && role !== "tutor") {
+    return res.status(403).json({ msg: "Access denied" });
+  }
+  next();
+};
+
+module.exports = { adminauth, tutorauth };

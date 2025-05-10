@@ -26,6 +26,47 @@ exports.addTopic = async (req, res) => {
     res.status(500).json({ message: "Error adding topic", error: err });
   }
 };
+exports.addBulkTopic = async (req, res) => {
+  const { courseId, topics } = req.body;
+
+  if (!courseId || !Array.isArray(topics) || topics.length === 0) {
+    return res
+      .status(400)
+      .json({ message: "Course ID and topics array are required." });
+  }
+
+  const isValid = topics.every((t) => t.title && t.content && t.difficulty);
+
+  if (!isValid) {
+    return res.status(400).json({
+      message: "Each topic must have title, content, and difficulty.",
+    });
+  }
+
+  try {
+    const topicsWithCourseId = topics.map((topic) => ({
+      ...topic,
+      courseId,
+    }));
+
+    const createdTopics = await Topic.insertMany(topicsWithCourseId);
+    const topicIds = createdTopics.map((topic) => topic._id);
+
+    await Course.findByIdAndUpdate(courseId, {
+      $push: { topics: { $each: topicIds } },
+    });
+
+    res.status(201).json({
+      message: "Bulk topics added successfully",
+      topics: createdTopics,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error adding bulk topics",
+      error: error.message,
+    });
+  }
+};
 
 exports.addQuestion = async (req, res) => {
   const { topicId, questionText, options, correctAnswer, difficulty } =
@@ -45,6 +86,41 @@ exports.addQuestion = async (req, res) => {
     res.status(201).json({ message: "Question added", question });
   } catch (err) {
     res.status(500).json({ message: "Error adding question", error: err });
+  }
+};
+exports.addMultipleQuestions = async (req, res) => {
+  const { topicId, questions } = req.body;
+
+  if (!Array.isArray(questions) || questions.length === 0) {
+    return res.status(400).json({ message: "Questions array is required" });
+  }
+
+  try {
+    const questionDocs = questions.map((q) => ({
+      topicId,
+      questionText: q.questionText,
+      options: q.options,
+      correctAnswer: q.correctAnswer,
+      difficulty: q.difficulty || "easy", // default if not passed
+    }));
+
+    const insertedQuestions = await Question.insertMany(questionDocs);
+    const questionIds = insertedQuestions.map((q) => q._id);
+
+    await Topic.findByIdAndUpdate(topicId, {
+      $push: { questions: { $each: questionIds } },
+    });
+
+    res.status(201).json({
+      message: "Questions added successfully",
+      addedCount: insertedQuestions.length,
+      questions: insertedQuestions,
+    });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ message: "Error adding multiple questions", error: err });
   }
 };
 

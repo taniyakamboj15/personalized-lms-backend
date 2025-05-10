@@ -27,7 +27,8 @@ const limiter = rateLimit({
 
 const allowedOrigins = [
   "http://localhost:5173", // Development Origin
-  "https://edudev.taniyakamboj.info", // Production Origin
+  "https://edudev.taniyakamboj.info",
+  // Production Origin
 ];
 
 const corsOptions = {
@@ -59,7 +60,7 @@ app.use("/api/questions", questionRoutes);
 app.use("/api/feedback", feedBackRoutes);
 
 app.get("/", (req, res) => {
-  res.status(200).json({ message: "Hellop from express" });
+  res.status(200).json({ message: "Hello Edu Vibe Server Is Running" });
 });
 
 app.use((err, req, res, next) => {
@@ -67,7 +68,6 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message });
 });
 
-// Database connection and server startup
 connectDB()
   .then(() => {
     app.listen(PORT, () => {

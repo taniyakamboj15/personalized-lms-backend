@@ -46,8 +46,8 @@ exports.sendOtp = async (req, res) => {
       return res.status(400).json({ msg: "Email already exists" });
     }
     await redisClient.set(`otp:${normalizedEmail}`, otp, { EX: 300 });
-    console.log("Sending OTP to email:", normalizedEmail);
-    console.log("Generated OTP:", otp);
+    // console.log("Sending OTP to email:", normalizedEmail);
+    // console.log("Generated OTP:", otp);
 
     await transporter.sendMail({
       from: `EduVibe <${process.env.EMAIL_USER}>`,
@@ -88,8 +88,8 @@ exports.verifyOtp = async (req, res) => {
 
   try {
     const storedOtp = await redisClient.get(`otp:${normalizedEmail}`);
-    console.log("Stored OTP:", storedOtp);
-    console.log("Received OTP:", otp);
+    // console.log("Stored OTP:", storedOtp);
+    // console.log("Received OTP:", otp);
 
     if (!storedOtp) {
       return res.status(400).json({ msg: "OTP expired or not found" });

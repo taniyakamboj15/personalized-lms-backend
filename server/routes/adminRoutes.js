@@ -8,9 +8,9 @@ const {
 } = require("../middleware/validateAdmin");
 const handleValidationErrors = require("../middleware/handleValidationErrors");
 const userAuth = require("../middleware/authmiddleware");
-const adminauth = require("../middleware/adminmiddleware");
+const tutorauth = require("../middleware/adminmiddleware").tutorauth;
 
-router.use("/", userAuth, adminauth);
+router.use("/", userAuth, tutorauth);
 
 router.post(
   "/add-course",
@@ -32,6 +32,9 @@ router.post(
   handleValidationErrors,
   adminController.addQuestion
 );
+router.post("/questions/bulk", adminController.addMultipleQuestions);
+router.post("/topics/bulk", adminController.addBulkTopic);
+
 router.get("/users", adminController.getAllUsers);
 
 module.exports = router;

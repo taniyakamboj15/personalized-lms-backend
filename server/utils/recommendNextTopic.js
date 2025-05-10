@@ -1,25 +1,36 @@
 function recommendNextTopic(topics, completedTopics, difficulty) {
+  const difficulties = ["easy", "medium", "hard"];
+
   let nextTopic = topics.find(
     (topic) =>
       !completedTopics.includes(topic._id.toString()) &&
       topic.difficulty.toLowerCase() === difficulty.toLowerCase()
   );
-  console.log(difficulty);
-  if (!nextTopic && difficulty === "medium") {
-    nextTopic = topics.find(
-      (topic) =>
-        !completedTopics.includes(topic._id.toString()) &&
-        topic.difficulty.toLowerCase() === "easy"
-    );
+
+  if (!nextTopic) {
+    const fallbackOrder = {
+      easy: ["medium", "hard"],
+      medium: ["easy", "hard"],
+      hard: ["medium", "easy"],
+    };
+
+    for (let fallbackDiff of fallbackOrder[difficulty.toLowerCase()]) {
+      nextTopic = topics.find(
+        (topic) =>
+          !completedTopics.includes(topic._id.toString()) &&
+          topic.difficulty.toLowerCase() === fallbackDiff
+      );
+      if (nextTopic) break;
+    }
   }
 
   if (!nextTopic) {
-    // console.log("no match found");
     nextTopic = topics.find(
       (topic) => !completedTopics.includes(topic._id.toString())
     );
   }
-  console.log("nexttopic ", nextTopic);
+
   return nextTopic || null;
 }
+
 module.exports = recommendNextTopic;
