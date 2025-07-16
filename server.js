@@ -28,6 +28,7 @@ const limiter = rateLimit({
 const allowedOrigins = [
   "http://localhost:5173", // Development Origin
   "https://edudev.taniyakamboj.info",
+  "https://edudev.abhinavranjan.me"
   // Production Origin
 ];
 
