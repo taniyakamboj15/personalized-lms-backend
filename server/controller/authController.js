@@ -25,7 +25,12 @@ exports.register = async (req, res) => {
       streak: userStreak,
     });
     const token = generateToken(user._id);
-    res.cookie("token", token, { path: "/", httpOnly: true });
+    res.cookie("token", token, {
+  path: "/",
+  httpOnly: true,
+  secure: true,            
+  sameSite: "None"         
+});
     const { password: _, ...userWithoutPassword } = user._doc;
     res
       .status(201)
@@ -135,7 +140,13 @@ exports.login = async (req, res) => {
 
     await user.save();
     const token = generateToken(user._id);
-    res.cookie("token", token, { path: "/", httpOnly: true });
+    res.cookie("token", token, {
+  path: "/",
+  httpOnly: true,
+  secure: true,            
+  sameSite: "None"         
+});
+
     const { password: _, ...userWithoutPassword } = user._doc;
     res
       .status(201)
@@ -184,7 +195,13 @@ exports.firebaseLogin = async (req, res) => {
 
     const appToken = generateToken(user._id);
 
-    res.cookie("token", appToken, { path: "/", httpOnly: true });
+    res.cookie("token", appToken, {
+  path: "/",
+  httpOnly: true,
+  secure: true,            // ✅ Required for HTTPS
+  sameSite: "None"         // ✅ Required for cross-origin request
+});
+
     res.status(201).json({ msg: "Login Successfull ", data: user });
   } catch (err) {
     console.error(err);
